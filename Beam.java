@@ -20,6 +20,8 @@ public class Beam {
 	double[] elastic = {29000000, 29000000, 27992000, 10000000, 10440000, 10442700, 33070000, 1900000};
 	double[] yields = {36000, 60000, 30000, 40000, 33000, 282000, 500000, 3000};
 	String[] cMatNames = new String[100];
+	double[] cMatYield = new double[100];
+	double[] cMatElastic = new double[100];
 	
 	Scanner input = new Scanner(System.in);
 	
@@ -35,6 +37,9 @@ public class Beam {
 			}
 		if (type == "I-Beam"){
 			IBeam();
+			}
+		if (type == "cMaterial"){
+			cMaterial();
 			}
 		}
 	
@@ -140,8 +145,30 @@ public class Beam {
 			System.out.printf("%-30s%-15.0f%-15.3f%-23.3f%-15s%-15.3e", names[i], yields[i], stress, fos, check, deflection);
 			System.out.println();
 			}
+		for (int i = 0; i < 100; i++){
+			while (cMatYield[i] != 0){
+				fos = cMatYield[i] / stress;
+				boolean check = fos >= 1;
+				deflection = Math.pow(length, 3) * load;
+				double nummm = cMatElastic[i] * moi * 48;
+				deflection = deflection / nummm;
+				System.out.printf("%-30s%-15.0f%-15.3f%-23.3f%-15s%-15.3e", cMatNames[i], cMatYield[i], stress, fos, check, deflection);
+				System.out.println();
+				}
+			}
+		
 		}
 	public void cMaterial(){
-		
+		Scanner input = new Scanner(System.in);
+		System.out.println("How many materials would you like to make?");
+		int num = input.nextInt();
+		for (int i = 0; i < num; i++){
+			System.out.println("What would you like to call your material?");
+			cMatNames[num] = input.next();
+			System.out.println("What is the yield of " + cMatNames[num]);
+			cMatYield[num] = input.nextDouble();
+			System.out.println("What is the module of elasticity for " + cMatNames[num]);
+			cMatElastic[num] = input.nextDouble();
+			}
 		}
 	}
